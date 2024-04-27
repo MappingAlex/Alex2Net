@@ -42,7 +42,10 @@ def print_author_ids(display_name, start_page):
         authors = get_result(query, p+1, npages)
         for a in authors:
             n = a['display_name']
-            i = a['last_known_institution']['display_name']
+            try:
+                i = a['last_known_institutions'][0]['display_name']
+            except:
+                i = 'unknown institution'
             r = stderr_input(f'Do you want to include {n} ({i})? y/n ')
             while r not in ['y', 'n']:
                 r = stderr_input('Write "y" or "n". ')
