@@ -1,1 +1,4 @@
+networkx
+pandas
 pyalex
+seaborn
