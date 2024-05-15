@@ -66,11 +66,18 @@ def main(works, cites, per_year_of_citation, color, ncolors, path):
         )
         sns.move_legend(
             ax, loc='center left', bbox_to_anchor=(1, 0.5),
-            reverse=True
+            reverse=True,
+            title='Cited paper' if color == 'works' else 'Paper that cites'
         )
     else:
         d = d[['Year', 'n']].groupby('Year').sum()
         sns.histplot(d, x='Year', weights='n')
+
+    if per_year_of_citation:
+        plt.xlabel('Year of publication of paper that cites')
+    else:
+        plt.xlabel('Year of publication of cited paper')
+    plt.ylabel('Number of citations')
     plt.xticks(rotation=90)
     plt.tight_layout()
     plt.savefig(path)
