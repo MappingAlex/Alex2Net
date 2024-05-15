@@ -45,17 +45,17 @@ def main(works, cites, per_year_of_citation, color_per_cite, ncolors, path):
     d = d.sort_values(by='Year')
     if color_per_cite:
         sns.set_context(rc={'patch.linewidth': 0.0})
-        f = sns.histplot(
+        sns.histplot(
             d, x='Year', weights='n',
             hue='Paper', multiple='stack'
         )
         plt.legend([], [], frameon=False)
     else:
         d = d[['Year', 'n']].groupby('Year').sum()
-        f = sns.histplot(d, x='Year', weights='n')
+        sns.histplot(d, x='Year', weights='n')
     plt.xticks(rotation=90)
     plt.tight_layout()
-    f.get_figure().savefig(path)
+    plt.savefig(path)
 
 
 parser = argparse.ArgumentParser()
