@@ -42,19 +42,23 @@ def clean_graphml(x, first_level=True):
 
 def main(works, graph_format, path):
     g = networkx.DiGraph()
+
     for w in works:
-        refs = w['referenced_works']
         if graph_format == 'gml':
             w = clean_gml(w)
         elif graph_format == 'graphml':
             w = clean_graphml(w)
         g.add_node(w['id'], **w)
-        for r in refs:
-            g.add_node(r)
+
+    for w in works:
+        for r in w['referenced_works']:
+            if r not in g:
+                continue
             if 'publication_date' in w:
                 g.add_edge(w['id'], r, date=w['publication_date'])
             else:
                 g.add_edge(w['id'], r)
+
     if graph_format == 'gml':
         networkx.write_gml(g, path)
     elif graph_format == 'graphml':
