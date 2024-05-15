@@ -2,6 +2,7 @@
 
 import argparse
 import json
+import pathlib
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -71,7 +72,7 @@ parser.add_argument(
 )
 parser.add_argument(
     'output',
-    type=argparse.FileType('wb'),
+    type=pathlib.Path,
     help='file to output the plot'
 )
 parser.add_argument(
