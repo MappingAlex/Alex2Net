@@ -61,9 +61,13 @@ def main(works, cites, per_year_of_citation, color, ncolors, path):
     if color:
         ax = sns.histplot(
             d, x='Year', weights='n',
-            hue='Paper', multiple='stack'
+            hue='Paper', multiple='stack',
+            hue_order=['Other']+list(reversed(top))
         )
-        sns.move_legend(ax, loc='center left', bbox_to_anchor=(1, 0.5))
+        sns.move_legend(
+            ax, loc='center left', bbox_to_anchor=(1, 0.5),
+            reverse=True
+        )
     else:
         d = d[['Year', 'n']].groupby('Year').sum()
         sns.histplot(d, x='Year', weights='n')
