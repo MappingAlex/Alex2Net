@@ -8,7 +8,7 @@ import pandas as pd
 import seaborn as sns
 
 
-def main(works, cites, per_year_of_citation, color_per_cite, path):
+def main(works, cites, per_year_of_citation, color_per_cite, ncolors, path):
     works = {w['id']: {
         'id': w['id'],
         'publication_year': w['publication_year']
@@ -20,6 +20,9 @@ def main(works, cites, per_year_of_citation, color_per_cite, path):
         'referenced_works': [r for r in c['referenced_works'] if r in works]
     } for c in cites}
 
+    top = sorted(cites.values(), key=lambda x: -len(x['referenced_works']))
+    top = [t['id'] for t in top[:ncolors-1]]
+
     d = dict()
     for c in cites.values():
         i = c['id']
@@ -29,10 +32,12 @@ def main(works, cites, per_year_of_citation, color_per_cite, path):
             else:
                 y = works[r]['publication_year']
             if y not in d:
-                d[y] = dict()
-            if i not in d[y]:
-                d[y][i] = 0
-            d[y][i] += 1
+                d[y] = {t: 0 for t in top}
+                d[y]['Other'] = 0
+            if i in d[y]:
+                d[y][i] += 1
+            else:
+                d[y]['Other'] += 1
     d = pd.DataFrame(d)
     d = pd.melt(d, ignore_index=False).reset_index()
     d.columns = ['Paper', 'Year', 'n']
@@ -83,7 +88,21 @@ parser.add_argument(
         'Plot each work that cites the studied works with a different color'
     )
 )
+parser.add_argument(
+    '-n', '--ncolors',
+    type=int, default=10,
+    help=(
+        'When -c is used, -n is the number of colors to use. '
+        'If there are more works to color than colors available, '
+        'works with less references are painted with the same color.'
+    )
+)
+
 args = parser.parse_args()
 works = [json.loads(j) for j in args.works.read().splitlines()]
 cites = [json.loads(j) for j in args.cites.read().splitlines()]
-main(works, cites, args.per_year_of_citation, args.color_per_cite, args.output)
+main(
+    works, cites,
+    args.per_year_of_citation, args.color_per_cite, args.ncolors,
+    args.output
+)
