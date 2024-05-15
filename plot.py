@@ -55,12 +55,12 @@ def main(works, cites, per_year_of_citation, color, ncolors, path):
     d = pd.DataFrame(d)
     d = pd.melt(d, ignore_index=False).reset_index()
     d.columns = ['Paper', 'Year', 'n']
-    d['Year'] = d['Year'].astype(str)
     d = d.sort_values(by='Year')
+    bins = max(d['Year']) - min(d['Year']) + 1
     sns.set_context(rc={'patch.linewidth': 0.0})
     if color:
         ax = sns.histplot(
-            d, x='Year', weights='n',
+            d, x='Year', weights='n', bins=bins,
             hue='Paper', multiple='stack',
             hue_order=['Other']+list(reversed(top))
         )
@@ -71,7 +71,7 @@ def main(works, cites, per_year_of_citation, color, ncolors, path):
         )
     else:
         d = d[['Year', 'n']].groupby('Year').sum()
-        sns.histplot(d, x='Year', weights='n')
+        sns.histplot(d, x='Year', weights='n', bins=bins)
 
     if per_year_of_citation:
         plt.xlabel('Year of publication of paper that cites')
