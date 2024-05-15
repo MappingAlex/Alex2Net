@@ -17,15 +17,13 @@ def main(works, cites, per_year_of_citation, color_per_cite, path):
     cites = {c['id']: {
         'id': c['id'],
         'publication_year': c['publication_year'],
-        'referenced_works': c['referenced_works']
+        'referenced_works': [r for r in c['referenced_works'] if r in works]
     } for c in cites}
 
     d = dict()
     for c in cites.values():
         i = c['id']
         for r in c['referenced_works']:
-            if r not in works:
-                continue
             if per_year_of_citation:
                 y = c['publication_year']
             else:
