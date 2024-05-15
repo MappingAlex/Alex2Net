@@ -123,7 +123,8 @@ parser.add_argument(
         'When -c is used, -n is the number of colors to use. '
         'If there are more works to color than colors available, '
         'less cited works or works that cite less '
-        'are painted with the same color.'
+        'are painted with the same color. '
+        '(default: 10)'
     )
 )
 

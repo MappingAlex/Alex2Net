@@ -102,7 +102,7 @@ parent_parser.add_argument(
         'number of results per page. '
         'In principle, it can be up to 200. '
         'But sometimes the server can not return so big results, '
-        'so it is recommended to use an smaller value (default: 50)'
+        'so it is recommended to use a smaller value (default: 50)'
     )
 )
 parent_parser.add_argument(
