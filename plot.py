@@ -42,6 +42,7 @@ def main(works, cites, per_year_of_citation, color_per_cite, ncolors, path):
     d = pd.melt(d, ignore_index=False).reset_index()
     d.columns = ['Paper', 'Year', 'n']
     d['Year'] = d['Year'].astype(str)
+    d = d.sort_values(by='Year')
     if color_per_cite:
         sns.set_context(rc={'patch.linewidth': 0.0})
         f = sns.histplot(
