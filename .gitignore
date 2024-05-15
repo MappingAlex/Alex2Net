@@ -1,3 +1,5 @@
 *.jsonl
+*.gml
+*.graphml
 *.pdf
 *.txt
