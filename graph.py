@@ -74,7 +74,7 @@ parser.add_argument(
 )
 parser.add_argument(
     '-f', '--format',
-    choices=['gml', 'graphml'],
+    choices=['gml', 'graphml'], default='gml',
     help=(
         'graph format to output. '
         'GML format can store more metadata (default: gml)'
