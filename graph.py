@@ -40,7 +40,7 @@ def clean_graphml(x, first_level=True):
         return x
 
 
-def main(works, graph_format, path):
+def main(works, graph_format, node_metadata, path):
     g = networkx.DiGraph()
 
     for w in works:
@@ -48,7 +48,7 @@ def main(works, graph_format, path):
             w = clean_gml(w)
         elif graph_format == 'graphml':
             w = clean_graphml(w)
-        g.add_node(w['id'], **w)
+        g.add_node(w['id'], **{m: w[m] for m in node_metadata if m in w})
 
     for w in works:
         for r in w['referenced_works']:
@@ -84,7 +84,17 @@ parser.add_argument(
         'GML format can store more metadata (default: gml)'
     )
 )
+parser.add_argument(
+    '-m', '--metadata',
+    nargs='*', default=[
+        'title', 'publication_date', 'authorships', 'primary_location'
+    ],
+    help=(
+        'metadata no include in the nodes '
+        '(default: title, publication_date, authorships, primary_location)'
+    )
+)
 
 args = parser.parse_args()
 works = [json.loads(j) for j in args.works.read().splitlines()]
-main(works, args.format, args.output)
+main(works, args.format, args.metadata, args.output)

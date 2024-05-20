@@ -142,11 +142,13 @@ cat works.jsonl cites.jsonl cited_by.jsonl > all.jsonl
 ./graph.py all.jsonl graph.gml
 ```
 
-The default format is GML because it can store more metadata.
-But if you want to use GraphML,
-you can use the option `-f graphml` or `--format graphml`.
-The node metadata will include all the metadata of the work
-that can be stored in the given format.
+You can use the option `-f` or `--format`
+to choose between GML and GraphML as output format (default: GML).
+GraphML can store less metadata.
+
 The edge metadata is just the date of publication of the work that cites.
+The node metadata is, by default, the title, the publication date,
+the authors, and the primary location.
+You can change the node metadata with option `-m` or `--metadata`.
 
 Finally, the option `-h` or `--help` shows a help message.
