@@ -91,7 +91,8 @@ you can just append the new results to the old ones:
 ./download.py cites works.jsonl -q 15 -p 4 >> cites.jsonl
 ```
 
-Finally, the option `-h` or `--help` shows a help message.
+In addition, every command in this repository has an option `-h` or `--help`
+that shows a help message.
 
 [2]: https://docs.openalex.org/how-to-use-the-api/rate-limits-and-authentication#the-polite-pool
 
@@ -117,8 +118,6 @@ with the option `-n` or `--ncolors` (default: 10).
 When this option is used,
 less cited works or works that cite less are painted with the same color,
 in order to only use the given number of colors.
-
-Finally, the option `-h` or `--help` shows a help message.
 
 ## Export to graph
 
@@ -150,5 +149,3 @@ The edge metadata is just the date of publication of the work that cites.
 The node metadata is, by default, the title, the publication date,
 the authors, and the primary location.
 You can change the node metadata with option `-m` or `--metadata`.
-
-Finally, the option `-h` or `--help` shows a help message.
