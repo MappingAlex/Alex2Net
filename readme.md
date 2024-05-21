@@ -165,14 +165,14 @@ A similar graph you can produce is the one where the nodes are the authors.
 ```
 
 In this case, the weight of an edge from an author $a$ to an author $b$
-is the probability that the author $a$ cites the author $b$:
+is the probability (in percentage) that the author $a$ cites the author $b$:
 
 ```math
 \frac{
   \sum_{i=2}^n \sum_{j=1}^{i-1} A_{i, a} \cdot A_{j, b} \cdot R_{i, j}
 }{
   \sum_{i=2}^n \sum_{j=1}^{i-1} A_{i, a} \cdot A_{j, b}
-}
+} \cdot 100
 ```
 
 where $n$ is the number of works,
