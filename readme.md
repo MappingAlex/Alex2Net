@@ -123,12 +123,21 @@ in order to only use the given number of colors.
 
 If you want to export the data of a works file to a graph,
 you can use the `./graph.py` command.
+
+You can use the option `-f` or `--format`
+to choose between GML and GraphML as output format (default: GML).
+
+You can produce the graph in two different ways:
+the nodes can be the works or the authors.
+
+### Works graph
+
 This command will create a graph
 where the nodes will be the works in `works.jsonl`,
 and there will be an edge from a node A to a node B if A cites B.
 
 ```sh
-./graph.py works.jsonl graph.gml
+./graph.py works works.jsonl graph_works.gml
 ```
 
 For example, if you want to create a graph with
@@ -138,14 +147,35 @@ with the files downloaded in the download section of this readme:
 
 ```sh
 cat works.jsonl cites.jsonl cited_by.jsonl > all.jsonl
-./graph.py all.jsonl graph.gml
+./graph.py works all.jsonl graph_works.gml
 ```
-
-You can use the option `-f` or `--format`
-to choose between GML and GraphML as output format (default: GML).
-GraphML can store less metadata.
 
 The edge metadata is just the date of publication of the work that cites.
 The node metadata is, by default, the title, the publication date,
 the authors, and the primary location.
 You can change the node metadata with option `-m` or `--metadata`.
+GraphML can store less metadata.
+
+### Authors graph
+
+A similar graph you can produce is the one where the nodes are the authors.
+
+```sh
+./graph.py authors all.jsonl graph_authors.gml
+```
+
+In this case, the weight of an edge from an author $a$ to an author $b$
+is the probability that the author $a$ cites the author $b$:
+
+```math
+\frac{
+  \sum_{i=2}^n \sum_{j=1}^{i-1} A_{i, a} \cdot A_{j, b} \cdot R_{i, j}
+}{
+  \sum_{i=2}^n \sum_{j=1}^{i-1} A_{i, a} \cdot A_{j, b}
+}
+```
+
+where $n$ is the number of works,
+$A_{i, a}$ is 1 if the $i$-th work (ordered by date of publication)
+is authored by $a$ and 0 otherwise,
+and $R_{i, j}$ is 1 if the $i$-th work references the $j$-th work.
