@@ -1,6 +1,7 @@
 # OpenAlex
+A collection of python tools to download, plot and export [OpenAlex][1] data in graph format.
 
-A collection of python tools to download, plot and export [OpenAlex][1] data in graph format.[1]:https://openalex.org/
+[1]: https://openalex.org/
 
 ## Download
 
