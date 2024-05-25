@@ -1,8 +1,8 @@
 # OpenAlex
 
 A collection of python tools to download, plot and export [OpenAlex][1] data in graph format.
-A project from [Heuristica][2]
 [1]: https://openalex.org/
+A project from [Heuristica][2]
 [2]: https://heuristica.barcelona/
 ## Download
 
