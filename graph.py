@@ -34,17 +34,16 @@ def clean_gml(x):
         return x
 
 
-def clean_graphml(x, first_level=True):
-    if isinstance(x, dict) and first_level:
-        x = {k: clean_graphml(v, first_level=False) for k, v in x.items()}
-        x = {k: v for k, v in x.items() if v is not None}
-        return x
-    elif isinstance(x, dict) and not first_level:
-        return None
+def clean_graphml(x, y=dict(), prefix=''):
+    if isinstance(x, dict):
+        for k, v in x.items():
+            y = clean_graphml(v, y, f'{prefix}_{k}')
     elif isinstance(x, list):
-        return None
+        for i, v in enumerate(x):
+            y = clean_graphml(v, y, f'{prefix}_{i}')
     else:
-        return x
+        y[prefix[1:]] = x
+    return y
 
 
 def graph_authors(works, graph_format, path):
@@ -146,7 +145,9 @@ works_parser = subparsers.add_parser(
 works_parser.add_argument(
     '-m', '--metadata',
     nargs='*', default=[
-        'title', 'publication_date', 'authorships', 'primary_location'
+        'title', 'publication_date', 'authorships', 'primary_location',
+        'authorships_1_author_id', 'authorships_1_author_display_name',
+        'primary_location_source_id', 'primary_location_source_display_name'
     ],
     help=(
         'metadata no include in the nodes '

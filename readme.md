@@ -152,7 +152,9 @@ cat works.jsonl cites.jsonl cited_by.jsonl > all.jsonl
 
 The edge metadata is just the date of publication of the work that cites.
 The node metadata is, by default, the title, the publication date,
-the authors, and the primary location.
+the authors (only the first one in graphml), and the primary location.
+In the case of graphml format, the author and the location
+only includes the id and the name.
 You can change the node metadata with option `-m` or `--metadata`.
 GraphML can store less metadata.
 
