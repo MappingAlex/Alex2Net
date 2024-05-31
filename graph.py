@@ -64,20 +64,23 @@ def graph_authors(works, graph_format, path):
     } for w in works}
     for w in sorted(works.values(), key=lambda x: x['publication_date']):
         for a in w['authorships']:
+            for r in w['referenced_works']:
+                if r not in works:
+                    continue
+                for b in works[r]['authorships']:
+                    try:
+                        g.edges[(a['id'], b['id'])]['num'] += 1
+                    except KeyError:
+                        g.add_edge(a['id'], b['id'], den=0, num=1)
 
+    for w in sorted(works.values(), key=lambda x: x['publication_date']):
+        for a in w['authorships']:
             for b in g.nodes():
                 d = g.nodes[b]['works']
                 try:
                     g.edges[(a['id'], b)]['den'] += d
                 except KeyError:
-                    g.add_edge(a['id'], b, den=d, num=0)
-
-            for r in w['referenced_works']:
-                if r not in works:
                     continue
-                for b in works[r]['authorships']:
-                    g.edges[(a['id'], b['id'])]['num'] += 1
-
             g.nodes[a['id']]['works'] += 1
 
     for e in g.edges():
