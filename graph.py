@@ -41,7 +41,7 @@ def clean_graphml(x, y=dict(), prefix=''):
     elif isinstance(x, list):
         for i, v in enumerate(x):
             y = clean_graphml(v, y, f'{prefix}_{i}')
-    else:
+    elif x is not None:
         y[prefix[1:]] = x
     return y
 
