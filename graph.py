@@ -46,6 +46,15 @@ def clean_graphml(x, y=dict(), prefix=''):
     return y
 
 
+def filter_metadata(w):
+    metadata = ['id', 'publication_date', 'authorships', 'referenced_works']
+    try:
+        metadata += args.metadata
+    except AttributeError:
+        pass
+    return {m: w[m] for m in metadata if m in w}
+
+
 def graph_authors(works, graph_format, path):
     g = networkx.DiGraph()
 
@@ -100,8 +109,9 @@ def graph_works(works, graph_format, node_metadata, path):
     g = networkx.DiGraph()
 
     for w in works:
-        w = clean(w, graph_format)
-        g.add_node(w['id'], **{m: w[m] for m in node_metadata if m in w})
+        node_metadata = {m: w[m] for m in node_metadata if m in w}
+        node_metadata = clean(node_metadata, graph_format)
+        g.add_node(w['id'], **node_metadata)
 
     for w in works:
         for r in w['referenced_works']:
@@ -149,8 +159,6 @@ works_parser.add_argument(
     '-m', '--metadata',
     nargs='*', default=[
         'title', 'publication_date', 'authorships', 'primary_location',
-        'authorships_1_author_id', 'authorships_1_author_display_name',
-        'primary_location_source_id', 'primary_location_source_display_name'
     ],
     help=(
         'metadata no include in the nodes '
@@ -167,7 +175,10 @@ authors_parser = subparsers.add_parser(
 )
 
 args = parser.parse_args()
-works = [json.loads(j) for j in args.works.read().splitlines()]
+works = [
+    filter_metadata(json.loads(j))
+    for j in args.works.read().splitlines()
+]
 if args.cmd == 'works':
     graph_works(works, args.format, args.metadata, args.output)
 elif args.cmd == 'authors':
