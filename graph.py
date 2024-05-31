@@ -68,22 +68,22 @@ def graph_authors(works, graph_format, path):
             for b in g.nodes():
                 d = g.nodes[b]['works']
                 try:
-                    g.edges[(a['id'], b)]['denominator'] += d
+                    g.edges[(a['id'], b)]['den'] += d
                 except KeyError:
-                    g.add_edge(a['id'], b, denominator=d, numerator=0)
+                    g.add_edge(a['id'], b, den=d, num=0)
 
             for r in w['referenced_works']:
                 if r not in works:
                     continue
                 for b in works[r]['authorships']:
-                    g.edges[(a['id'], b['id'])]['numerator'] += 1
+                    g.edges[(a['id'], b['id'])]['num'] += 1
 
             g.nodes[a['id']]['works'] += 1
 
     for e in g.edges():
         e = g.edges[e]
         try:
-            e['weight'] = float(e['numerator'])/float(e['denominator'])*100
+            e['weight'] = float(e['num'])/float(e['den'])*100
         except ZeroDivisionError:
             e['weight'] = 0.0
 
